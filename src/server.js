@@ -14,6 +14,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
 app.post('*', upload.array(), (req, res) => {
+  console.log(`${req.url} -- ${Date.now()}`)
   request.post({
     url: 'https://github.com/login/oauth/access_token',
     form: req.body,
@@ -23,12 +24,15 @@ app.post('*', upload.array(), (req, res) => {
     },
   }, (error, r, body) => {
     if (!error) {
+      console.log(JSON.stringify(body));
       res.send(body)
     } else {
+      console.log(error);
       res.json({ error })
     }
   })
 })
 
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 3000;
+console.log(port);
 app.listen(port, () => console.log(`gh-oauth-server listening on port ${port}`))
